@@ -3,8 +3,11 @@ import sequelize from '../config/database';
 
 class User extends Model {
   public id!: number;
-  public username!: string;  // Changed from `name` to `username`
+  public username!: string;
   public email!: string;
+  public password!: string;
+  public number!: string;
+  public role!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -16,7 +19,7 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {  // Changed from `name` to `username`
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -24,6 +27,19 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    number: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'user',  // Default role is set to 'user'
     },
   },
   {

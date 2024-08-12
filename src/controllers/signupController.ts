@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
 export const register = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, number } = req.body;
 
   try {
     // Check if user exists
@@ -19,12 +19,15 @@ export const register = async (req: Request, res: Response) => {
       username,
       email,
       password: hashedPassword,
+      number,
+      // role is not set here, so it defaults to 'user'
     });
 
     // Create and assign JWT
     const payload = {
       user: {
         id: user.id,
+        role: user.role,  // Include role in the payload
       },
     };
 
@@ -33,7 +36,7 @@ export const register = async (req: Request, res: Response) => {
     });
 
     res.json({ token });
-  } catch (err:any) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
   }

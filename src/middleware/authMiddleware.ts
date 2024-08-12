@@ -16,3 +16,14 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
+
+// Example of role-based authorization middleware
+export const authorizeRole = (roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = (req as any).user;
+    if (!roles.includes(user.role)) {
+      return res.status(403).json({ msg: 'Forbidden: Access is denied' });
+    }
+    next();
+  };
+};
