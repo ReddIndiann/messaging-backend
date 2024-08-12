@@ -11,7 +11,7 @@ import contactRoutes from './routes/contactRouter';
 import groupRoutes from './routes/groupRouter';
 import packageRoutes from './routes/packageRouter'; // Import Package routes
 import messageTemplateRoutes from './routes/messageTemplateRoutes'; // Import MessageTemplate routes
-
+import apiKeyRoutes from './routes/apiKeyRouter';
 
 const app = express();
 
@@ -30,8 +30,9 @@ router.use('/auth', authRoutes);
 router.use('/senders', senderRoutes);
 router.use('/contacts', contactRoutes);
 router.use('/groups', groupRoutes);
-router.use('/packages', packageRoutes); // Use Package routes
+router.use('/packages', packageRoutes); 
 router.use('/message-templates', messageTemplateRoutes); 
+router.use('/apikeys', apiKeyRoutes); 
 app.use('/api', router);
 
 app.listen(5000, () => {
