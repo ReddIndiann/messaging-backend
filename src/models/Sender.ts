@@ -1,4 +1,3 @@
-// models/Sender.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database'; // Adjust the path if necessary
 
@@ -9,7 +8,7 @@ interface SenderAttributes {
   status: string;
 }
 
-interface SenderCreationAttributes extends Optional<SenderAttributes, 'id'> {}
+interface SenderCreationAttributes extends Optional<SenderAttributes, 'id' | 'status'> {} // status is optional
 
 class Sender extends Model<SenderAttributes, SenderCreationAttributes> implements SenderAttributes {
   public id!: number;
@@ -40,7 +39,7 @@ Sender.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'pending', // Set default value to 'pending'
+      defaultValue: 'pending', // Default value set to 'pending'
     },
   },
   {

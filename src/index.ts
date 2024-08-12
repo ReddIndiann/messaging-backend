@@ -2,8 +2,16 @@ import express from 'express';
 import sequelize from './config/database';
 import User from './models/User';
 import Sender from './models/Sender';
+import Contact from './models/Contact';
+import Group from './models/Group';
+import Package from './models/Package'; // Import the Package model
 import authRoutes from './routes/authRoutes';
-import senderRoutes from './routes/senderRouter'; // Import Sender routes
+import senderRoutes from './routes/senderRouter';
+import contactRoutes from './routes/contactRouter';
+import groupRoutes from './routes/groupRouter';
+import packageRoutes from './routes/packageRouter'; // Import Package routes
+import messageTemplateRoutes from './routes/messageTemplateRoutes'; // Import MessageTemplate routes
+
 
 const app = express();
 
@@ -19,14 +27,12 @@ sequelize.sync({ alter: true })
 
 const router = express.Router();
 router.use('/auth', authRoutes);
-router.use('/senders', senderRoutes); // Use Sender routes
+router.use('/senders', senderRoutes);
+router.use('/contacts', contactRoutes);
+router.use('/groups', groupRoutes);
+router.use('/packages', packageRoutes); // Use Package routes
+router.use('/message-templates', messageTemplateRoutes); 
 app.use('/api', router);
-
-// Example route
-app.get('/', async (req, res) => {
-  const data = await User.findAll();
-  res.json(data);
-});
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
