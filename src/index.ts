@@ -1,19 +1,28 @@
 import express from 'express';
+import cors from 'cors'; // Import the cors middleware
 import sequelize from './config/database';
 import User from './models/User';
 import Sender from './models/Sender';
 import Contact from './models/Contact';
 import Group from './models/Group';
-import Package from './models/Package'; // Import the Package model
+import Package from './models/Package';
 import authRoutes from './routes/authRoutes';
 import senderRoutes from './routes/senderRouter';
 import contactRoutes from './routes/contactRouter';
 import groupRoutes from './routes/groupRouter';
-import packageRoutes from './routes/packageRouter'; // Import Package routes
-import messageTemplateRoutes from './routes/messageTemplateRoutes'; // Import MessageTemplate routes
+import packageRoutes from './routes/packageRouter';
+import messageTemplateRoutes from './routes/messageTemplateRoutes';
 import apiKeyRoutes from './routes/apiKeyRouter';
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your frontend domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 
 app.use(express.json());
 

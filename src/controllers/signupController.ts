@@ -35,7 +35,17 @@ export const register = async (req: Request, res: Response) => {
       expiresIn: '1h',
     });
 
-    res.json({ token });
+    // Respond with user data and token
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        number: user.number,
+        role: user.role,  // Include role if needed
+      },
+    });
   } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
