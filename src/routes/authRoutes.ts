@@ -1,11 +1,15 @@
 import express from 'express';
-import { register } from '../controllers/signupController';
-import { signin } from '../controllers/signincontroller';
-import { auth } from '../middleware/authMiddleware';
+import { auth, authorizeRole } from '../middleware/authMiddleware';
+import { authController } from '../controllers/authController';
 
 const router = express.Router();
 
-router.post('/signup', register);
-router.post('/signin', signin); // Add route for signin
+// Public routes
+router.post('/signup', authController.register);
+router.post('/signin', authController.signin);
+
+// Protected routes
+router.put('/update/:id', auth, authorizeRole(['admin', 'user']), authController.updateUser);
+router.delete('/delete/:id', auth, authorizeRole(['admin']), authController.deleteUser);
 
 export default router;

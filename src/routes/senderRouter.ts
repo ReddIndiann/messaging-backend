@@ -1,19 +1,26 @@
 import { Router } from 'express';
 import Sender from '../models/Sender';
+import User from '../models/User'; // Import the User model
 
 const router = Router();
 
 // Route to create a new sender
 router.post('/', async (req, res) => {
   try {
-    const { name, userId } = req.body;
+    const { name, userId, purpose } = req.body;
 
-    if (!name || !userId) {
-      return res.status(400).json({ error: 'Name and userId are required' });
+    if (!name || !userId || !purpose) {
+      return res.status(400).json({ error: 'Name, purpose, and userId are required' });
+    }
+
+    // Validate that the userId exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
     // Create a new Sender with default status 'pending'
-    const newSender = await Sender.create({ name, userId });
+    const newSender = await Sender.create({ name, userId, purpose });
     res.status(201).json(newSender);
   } catch (error) {
     console.error('Error creating sender:', error);
@@ -25,7 +32,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, userId, status } = req.body;
+    const { name, userId, status, purpose } = req.body;
 
     // Find the sender by ID
     const sender = await Sender.findByPk(id);
@@ -34,8 +41,16 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Sender not found' });
     }
 
+    // If userId is being updated, validate that the new userId exists
+    if (userId) {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+    }
+
     // Update the sender's details
-    await sender.update({ name, userId, status });
+    await sender.update({ name, userId, status, purpose });
     res.json(sender);
   } catch (error) {
     console.error('Error updating sender:', error);
@@ -64,13 +79,15 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Route to get a sender by ID
+// Route to get a sender by ID, including the related User data
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the sender by ID
-    const sender = await Sender.findByPk(id);
+    // Find the sender by ID and include the associated User
+    const sender = await Sender.findByPk(id, {
+      include: [{ model: User, as: 'user' }] // Include the User data
+    });
 
     if (!sender) {
       return res.status(404).json({ error: 'Sender not found' });
@@ -83,10 +100,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Route to get all senders
+// Route to get all senders, including the related User data
 router.get('/', async (req, res) => {
   try {
-    const senders = await Sender.findAll();
+    const senders = await Sender.findAll({
+      include: [{ model: User, as: 'user' }] // Include the User data
+    });
     res.json(senders);
   } catch (error) {
     console.error('Error retrieving senders:', error);
@@ -94,14 +113,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to get all senders by userId
+// Route to get all senders by userId, including the related User data
 router.get('/user/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Find all senders with the specified userId
+    // Find all senders with the specified userId and include the associated User
     const senders = await Sender.findAll({
-      where: { userId }
+      where: { userId },
+      include: [{ model: User, as: 'user' }] // Include the User data
     });
 
     if (senders.length === 0) {

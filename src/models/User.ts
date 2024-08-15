@@ -8,6 +8,8 @@ class User extends Model {
   public password!: string;
   public number!: string;
   public role!: string;
+  public walletbalance!: number;
+  public creditbalance!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -39,7 +41,17 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user',  // Default role is set to 'user'
+      defaultValue: 'user', // Default role is set to 'user'
+    },
+    walletbalance: {
+      type: DataTypes.INTEGER, // Changed to INTEGER
+      allowNull: false,
+      defaultValue: 0, // Default value set to 0
+    },
+    creditbalance: {
+      type: DataTypes.INTEGER, // Changed to INTEGER
+      allowNull: false,
+      defaultValue: 0, // Default value set to 0
     },
   },
   {

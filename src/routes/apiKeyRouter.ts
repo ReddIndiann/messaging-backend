@@ -6,13 +6,13 @@ const router = Router();
 // Create a new API key
 router.post('/', async (req, res) => {
   try {
-    const { key, userId } = req.body;
+    const { keycode, userId } = req.body;
 
-    if (!key || !userId) {
+    if (!keycode || !userId) {
       return res.status(400).json({ error: 'Key and userId are required' });
     }
 
-    const newApiKey = await ApiKey.create({ key, userId });
+    const newApiKey = await ApiKey.create({ keycode, userId });
     res.status(201).json(newApiKey);
   } catch (error) {
     console.error('Error creating API key:', error);
@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { key, userId } = req.body;
+    const { keycode, userId } = req.body;
 
     const apiKey = await ApiKey.findByPk(id);
 
@@ -61,7 +61,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'API key not found' });
     }
 
-    await apiKey.update({ key, userId });
+    await apiKey.update({ keycode, userId });
     res.json(apiKey);
   } catch (error) {
     console.error('Error updating API key:', error);

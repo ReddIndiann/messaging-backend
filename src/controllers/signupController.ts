@@ -44,6 +44,8 @@ export const register = async (req: Request, res: Response) => {
         email: user.email,
         number: user.number,
         role: user.role,  // Include role if needed
+        walletbalance:user.walletbalance,
+        creditbalance:user.creditbalance,
       },
     });
   } catch (err: any) {

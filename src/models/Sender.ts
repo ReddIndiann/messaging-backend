@@ -5,6 +5,7 @@ interface SenderAttributes {
   id: number;
   name: string;
   userId: number;
+  purpose:string;
   status: string;
 }
 
@@ -14,6 +15,7 @@ class Sender extends Model<SenderAttributes, SenderCreationAttributes> implement
   public id!: number;
   public name!: string;
   public userId!: number;
+  public purpose!: string;
   public status!: string;
 
   // timestamps!
@@ -35,6 +37,10 @@ Sender.init(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    purpose:{
+      type: DataTypes.STRING,
+      allowNull:false
     },
     status: {
       type: DataTypes.STRING,

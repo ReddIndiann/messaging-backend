@@ -3,7 +3,7 @@ import sequelize from '../config/database'; // Adjust the path if necessary
 
 interface ApiKeyAttributes {
   id: number;
-  key: string;
+  keycode: string;
   userId: number;
 }
 
@@ -11,7 +11,7 @@ interface ApiKeyCreationAttributes extends Optional<ApiKeyAttributes, 'id'> {}
 
 class ApiKey extends Model<ApiKeyAttributes, ApiKeyCreationAttributes> implements ApiKeyAttributes {
   public id!: number;
-  public key!: string;
+  public  keycode!: string;
   public userId!: number;
 
   // timestamps!
@@ -26,7 +26,7 @@ ApiKey.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    key: {
+    keycode: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true, // Ensure that API keys are unique
